@@ -1,0 +1,56 @@
+# -----------------------------------------------------------------------------
+# ARCHIVO DE EXCLUSIÓN PARA GEMINI CODE ASSIST (@workspace)
+#
+# Este archivo le dice a la IA qué carpetas y archivos ignorar para mejorar
+# el rendimiento y la relevancia de las respuestas.
+# -----------------------------------------------------------------------------
+
+# --- Dependencias de Lenguajes ---
+# Excluye las carpetas que contienen las librerías instaladas.
+/node_modules/
+/venv/
+/.venv/
+/env/
+/bower_components/
+
+# --- Entornos y Herramientas ---
+# Excluye archivos y carpetas de configuración de Docker y otros entornos.
+Dockerfile
+docker-compose.yml
+.dockerignore
+/.idea/
+/.classpath
+/.project
+
+# --- Carpetas de Build y Compilación ---
+# Excluye los archivos generados automáticamente al compilar el proyecto.
+/dist/
+/build/
+/out/
+/__pycache__/
+/.ipynb_checkpoints/
+
+# --- Datos, Modelos y Logs (¡Muy Importante!) ---
+# Excluye carpetas que contienen grandes volúmenes de datos, modelos de ML,
+# logs y reportes que no son código fuente.
+/data/
+/logs/
+/reports/
+/coverage/
+
+# --- Archivos de Base de Datos y Formatos Pesados ---
+# Excluye archivos de bases de datos locales y formatos de datos científicos.
+*.db
+*.sqlite3
+*.keras
+*.h5
+*.pkl
+*.joblib
+*.nc
+*.csv
+*.parquet
+
+# --- Archivos de Configuración Sensibles ---
+# Excluye archivos que puedan contener secretos, aunque ya deberían estar en .gitignore.
+*.pem
+*.key
