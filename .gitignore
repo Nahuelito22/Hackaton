@@ -52,3 +52,6 @@ src/static/
 # Ignorar features_api
 # src/api/features_api.py
 node_modules
+
+# Ignorar el archivo de secretos de Streamlit
+.streamlit/secrets.toml
