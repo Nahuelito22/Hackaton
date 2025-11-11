@@ -12,7 +12,8 @@ load_dotenv()
 # external_stylesheets nos da un look profesional (Bootstrap)
 app = Dash(__name__, 
            use_pages=True, 
-           external_stylesheets=[dbc.themes.BOOTSTRAP])
+           external_stylesheets=[dbc.themes.BOOTSTRAP],
+           suppress_callback_exceptions=True)
 
 # --- El "Caparazón" de la App ---
 app.layout = dbc.Container(
