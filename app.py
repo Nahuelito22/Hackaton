@@ -26,7 +26,7 @@ app.layout = dbc.Container(
                 dbc.NavItem(dbc.NavLink(page['name'], href=page['relative_path']))
                 for page in dash.page_registry.values() if page['path'] not in ['/terminos-y-condiciones', '/politica-de-privacidad']
             ],
-            brand=html.Img(src='/assets/Guidia_Logotipo_mas_Texto.png', height='50px'),
+            brand=html.Img(src='/assets/Guidia_Texto.png', height='30px'),
             brand_href="/",
             color="primary",
             dark=True,

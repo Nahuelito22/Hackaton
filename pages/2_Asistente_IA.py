@@ -7,7 +7,7 @@ import json
 from fpdf import FPDF # NUEVO: Importar la biblioteca de PDF
 
 # Registrar esta página
-dash.register_page(__name__, name='Asistente IA')
+dash.register_page(__name__, name='Asistente IA', order=2)
 
 # --- Configurar la API de Gemini ---
 try:

@@ -4,7 +4,7 @@ import dash_bootstrap_components as dbc
 import json # Usaremos json para guardar los datos
 
 # Registrar esta página
-dash.register_page(__name__, path='/', name='Perfil')
+dash.register_page(__name__, path='/', name='Perfil', order=1)
 
 # --- Layout de la Página de Perfil (V2 - Dinámico) ---
 layout = dbc.Container([
