@@ -7,6 +7,8 @@ import json
 import markdown2
 import io
 from xhtml2pdf import pisa
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
 # Registrar esta página
 dash.register_page(__name__, name='Asistente IA', order=2)
@@ -628,10 +630,11 @@ Nivel Secundario
 
         # Crear el PDF en memoria
         result = io.BytesIO()
+        # La función link_callback es crucial para que xhtml2pdf encuentre los archivos locales (fuentes)
         pdf = pisa.CreatePDF(
-                io.StringIO(source_html),                # El HTML a convertir
-                dest=result,                             # El buffer de salida
-                link_callback=lambda uri, rel: os.path.join(os.getcwd(), uri.replace('/', os.sep))) # Para que encuentre las fuentes
+                io.StringIO(source_html),
+                dest=result,
+                link_callback=lambda uri, rel: os.path.join(os.getcwd(), uri.replace('/', os.sep)))
 
         if not pdf.err:
             return dcc.send_bytes(result.getvalue(), "Guidia_Planificacion.pdf")
