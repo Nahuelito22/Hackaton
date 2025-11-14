@@ -11,11 +11,13 @@ datos_encuestas = [
     {"porcentaje": "70%", "texto": "del tiempo administrativo de un docente se dedica a la planificación y documentación, restando tiempo para la enseñanza directa."}
 ]
 
-# --- Miembros del Equipo (Placeholder) ---
+# --- Miembros del Equipo ---
 miembros_equipo = [
-    {"nombre": "Nombre Apellido 1", "rol": "Líder de Proyecto / Experto en Educación"},
-    {"nombre": "Nombre Apellido 2", "rol": "Desarrollador Full-Stack / Experto en IA"},
-    {"nombre": "Nombre Apellido 3", "rol": "Diseñador UX/UI / Especialista en Accesibilidad"},
+    {"nombre": "Nahuel Ghilardi", "rol": "Back-end / Front-end / Data-Scientist"},
+    {"nombre": "Mateo Gomez", "rol": "Back-end / Front-end"},
+    {"nombre": "Tomas Muñoz", "rol": "Back-end / Front-end"},
+    {"nombre": "Leandro Briceño", "rol": "Back-end / Front-end"},
+    {"nombre": "Franco", "rol": "Back-end / Front-end"},
 ]
 
 def crear_card_miembro(miembro):
