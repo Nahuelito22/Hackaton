@@ -30,16 +30,18 @@ layout = dbc.Container([
             dbc.Card([
                 dbc.CardHeader("Paso 1: ¿Qué quieres hacer hoy?"),
                 dbc.CardBody([
-                    dcc.RadioItems(
-                        id='selector-accion-principal',
-                        options=[
-                            {'label': ' Crear una nueva Planificación (Anual/Mensual)', 'value': 'crear'},
-                            {'label': ' Analizar un Plan existente / Generar Rúbricas', 'value': 'analizar'},
-                            {'label': ' Adaptar una Actividad Diaria (Inclusión Rápida)', 'value': 'adaptar'},
-                        ],
-                        value='crear',
-                        labelStyle={'display': 'block', 'margin-bottom': '10px'}
-                    )
+                    html.Div([
+                        dcc.RadioItems(
+                            id='selector-accion-principal',
+                            options=[
+                                {'label': ' Crear una nueva Planificación (Anual/Mensual)', 'value': 'crear'},
+                                {'label': ' Analizar un Plan existente / Generar Rúbricas', 'value': 'analizar'},
+                                {'label': ' Adaptar una Actividad Diaria (Inclusión Rápida)', 'value': 'adaptar'},
+                            ],
+                            value='crear',
+                            labelStyle={'display': 'block', 'margin-bottom': '10px'}
+                        )
+                    ], className="control-group")
                 ])
             ]),
             html.Br(),
@@ -104,20 +106,22 @@ layout = dbc.Container([
                             
                             dbc.AccordionItem(title="Detalles de Inclusión (Adaptar Rúbricas)", children=[
                                 dbc.Label("Selecciona los desafíos a considerar:"),
-                                # NUEVO: Lista de inclusión ampliada
-                                dbc.Checklist(
-                                    id="ia-inclusion-crear", 
-                                    options=[
-                                        {'label': 'TDAH (Déficit de Atención con Hiperactividad)', 'value': 'TDAH'},
-                                        {'label': 'Dislexia', 'value': 'Dislexia'},
-                                        {'label': 'TDA (Déficit de Atención sin Hiperactividad)', 'value': 'TDA'},
-                                        {'label': 'TEA (Trastorno del Espectro Autista Leve)', 'value': 'TEA'},
-                                        {'label': 'Discalculia (Dificultad Matemática)', 'value': 'Discalculia'},
-                                        {'label': 'Altas Capacidades', 'value': 'Altas Capacidades'},
-                                    ], 
-                                    inline=False,
-                                    labelStyle={'display': 'block', 'margin-bottom': '5px'}
-                                ),
+                                html.Div([
+                                    # NUEVO: Lista de inclusión ampliada
+                                    dbc.Checklist(
+                                        id="ia-inclusion-crear", 
+                                        options=[
+                                            {'label': 'TDAH (Déficit de Atención con Hiperactividad)', 'value': 'TDAH'},
+                                            {'label': 'Dislexia', 'value': 'Dislexia'},
+                                            {'label': 'TDA (Déficit de Atención sin Hiperactividad)', 'value': 'TDA'},
+                                            {'label': 'TEA (Trastorno del Espectro Autista Leve)', 'value': 'TEA'},
+                                            {'label': 'Discalculia (Dificultad Matemática)', 'value': 'Discalculia'},
+                                            {'label': 'Altas Capacidades', 'value': 'Altas Capacidades'},
+                                        ], 
+                                        inline=False,
+                                        labelStyle={'display': 'block', 'margin-bottom': '5px'}
+                                    ),
+                                ], className="control-group")
                             ]),
                         ],
                         start_collapsed=False,
@@ -136,15 +140,17 @@ layout = dbc.Container([
                 dbc.CardHeader("Paso 3: Detalles para ANALIZAR Planificación"),
                 dbc.CardBody([
                     dbc.Label("¿Qué quieres que haga la IA con este documento?"),
-                    dbc.Checklist(
-                        id="ia-accion-analizar",
-                        options=[
-                            {'label': 'Generar Rúbricas de Evaluación', 'value': 'rubricas'},
-                            {'label': 'Resumir para Suplente (detectar temas clave)', 'value': 'resumen'},
-                            {'label': 'Sugerir Adaptaciones de Inclusión', 'value': 'adaptar-doc'},
-                        ],
-                        value=['rubricas']
-                    ),
+                    html.Div([
+                        dbc.Checklist(
+                            id="ia-accion-analizar",
+                            options=[
+                                {'label': 'Generar Rúbricas de Evaluación', 'value': 'rubricas'},
+                                {'label': 'Resumir para Suplente (detectar temas clave)', 'value': 'resumen'},
+                                {'label': 'Sugerir Adaptaciones de Inclusión', 'value': 'adaptar-doc'},
+                            ],
+                            value=['rubricas']
+                        ),
+                    ], className="control-group"),
                     html.Hr(),
                     dbc.Label("Pega aquí la Planificación (Anual, Mensual, etc.) a ANALIZAR:"),
                     dbc.Textarea(id="ia-plan-base-analizar", rows=20,
@@ -184,6 +190,7 @@ layout = dbc.Container([
                 dbc.Col(dbc.Button("Descargar PDF",
                                  id="btn-download-pdf",
                                  color="secondary",
+                                 outline=True, # Estilo secundario
                                  className="w-100",
                                  n_clicks=0), width=4),
             ], className="mt-3"),
