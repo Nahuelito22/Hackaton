@@ -81,7 +81,10 @@ layout = dbc.Container([
                 dbc.CardBody([
                     
                     dbc.Label("Tipo de Plan a Crear:"),
-                    dcc.RadioItems(id="ia-select-tipo-plan-crear", value='Anual-Primaria'), # Se actualiza por callback
+                    html.Div(
+                        dcc.RadioItems(id="ia-select-tipo-plan-crear", value='Anual-Primaria'), # Se actualiza por callback
+                        className="control-group"
+                    ),
                     
                     html.Hr(),
                     
