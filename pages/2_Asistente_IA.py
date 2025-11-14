@@ -1,5 +1,5 @@
 import dash
-from dash import dcc, html, Input, Output, State, callback, no_update
+from dash import dcc, html, Input, Output, State, callback, no_update, ALL
 import dash_bootstrap_components as dbc
 import google.generativeai as genai
 import os
@@ -8,6 +8,16 @@ from fpdf import FPDF # Importar la biblioteca de PDF
 
 # Registrar esta página
 dash.register_page(__name__, name='Asistente IA', order=2)
+
+# --- Constantes ---
+DESAFIOS_INCLUSION = [
+    'TDAH (Déficit de Atención con Hiperactividad)',
+    'Dislexia',
+    'TDA (Déficit de Atención sin Hiperactividad)',
+    'TEA (Trastorno del Espectro Autista Leve)',
+    'Discalculia (Dificultad Matemática)',
+    'Altas Capacidades',
+]
 
 # --- Configurar la API de Gemini ---
 try:
@@ -111,22 +121,25 @@ layout = dbc.Container([
                             ]),
                             
                             dbc.AccordionItem(title="Detalles de Inclusión (Adaptar Rúbricas)", children=[
-                                dbc.Label("Selecciona los desafíos a considerar:"),
+                                dbc.Label("Indica la cantidad de alumnos por desafío:", className="mb-2"),
                                 html.Div([
-                                    # NUEVO: Lista de inclusión ampliada
-                                    dbc.Checklist(
-                                        id="ia-inclusion-crear", 
-                                        options=[
-                                            {'label': 'TDAH (Déficit de Atención con Hiperactividad)', 'value': 'TDAH'},
-                                            {'label': 'Dislexia', 'value': 'Dislexia'},
-                                            {'label': 'TDA (Déficit de Atención sin Hiperactividad)', 'value': 'TDA'},
-                                            {'label': 'TEA (Trastorno del Espectro Autista Leve)', 'value': 'TEA'},
-                                            {'label': 'Discalculia (Dificultad Matemática)', 'value': 'Discalculia'},
-                                            {'label': 'Altas Capacidades', 'value': 'Altas Capacidades'},
-                                        ], 
-                                        inline=False,
-                                        labelStyle={'display': 'block', 'margin-bottom': '5px'}
-                                    ),
+                                    dbc.Row([
+                                        dbc.Col(html.Strong("Desafío de Inclusión"), width=8),
+                                        dbc.Col(html.Strong("Cantidad"), width=4),
+                                    ], className="mb-2"),
+                                ] + [
+                                    dbc.Row([
+                                        dbc.Col(dbc.Label(desafio), width=8, style={'font-size': '0.9rem'}),
+                                        dbc.Col(
+                                            dbc.Input(
+                                                id={'type': 'inclusion-cant', 'index': desafio},
+                                                type='number',
+                                                min=0,
+                                                value=0,
+                                            ),
+                                            width=4
+                                        ),
+                                    ], className="mb-1 align-items-center") for desafio in DESAFIOS_INCLUSION
                                 ], className="control-group")
                             ]),
                         ],
@@ -357,12 +370,12 @@ def toggle_mes_container(plan_type):
     State('ia-select-tipo-plan-crear', 'value'),
     State('ia-materia', 'value'),
     State('ia-ano-grado', 'value'),
-    State('ia-mes-plan', 'value'), # NUEVO
+    State('ia-mes-plan', 'value'),
     State('ia-cant-alumnos', 'value'),
     State('ia-dias-clase-crear', 'value'),
     State('ia-cant-eval-crear', 'value'),
     State('ia-cant-tps-crear', 'value'),
-    State('ia-inclusion-crear', 'value'),
+    State({'type': 'inclusion-cant', 'index': ALL}, 'value'), # NUEVO
     State('ia-plan-base-crear', 'value'),
     State('ia-dias-patios', 'value'),
     State('ia-libro-matriz', 'value'),
@@ -381,7 +394,7 @@ def generar_respuesta_ia_unificada(n_clicks, data_json, accion,
                                    esc_json, nivel, contexto,
                                    # Argumentos de "Crear"
                                    tipo_plan_crear, materia, ano_grado, mes_plan, cant_alumnos, 
-                                   dias_clase, cant_eval, cant_tps, inclusion_crear, 
+                                   dias_clase, cant_eval, cant_tps, inclusion_cant, 
                                    plan_base_crear, dias_patios, libro_matriz, contexto_general,
                                    # Argumentos de "Analizar"
                                    accion_analizar, plan_base_analizar,
@@ -408,7 +421,15 @@ def generar_respuesta_ia_unificada(n_clicks, data_json, accion,
         # Añadir el mes al tipo de plan si está definido
         plan_str = f"{tipo_plan_crear} para el mes de {mes_plan}" if mes_plan and 'Mensual' in tipo_plan_crear else tipo_plan_crear
 
-        inclusion_str = ", ".join(inclusion_crear) if inclusion_crear else "ninguno"
+        # Procesar los desafíos de inclusión
+        desafios_con_cantidad = []
+        for i, cant in enumerate(inclusion_cant):
+            if cant and cant > 0:
+                desafio_nombre = DESAFIOS_INCLUSION[i].split(' (')[0] # Tomar nombre corto
+                desafios_con_cantidad.append(f"{desafio_nombre} ({cant} alumno/s)")
+        
+        inclusion_str = ", ".join(desafios_con_cantidad) if desafios_con_cantidad else "ninguno especificado"
+
         contexto_nivel_str = ""
         if nivel == 'Primario' and dias_patios:
             contexto_nivel_str = f"Eventos especiales a considerar (días patrios): {dias_patios}"
@@ -427,7 +448,7 @@ def generar_respuesta_ia_unificada(n_clicks, data_json, accion,
         * Cantidad de Alumnos: {cant_alumnos}
         * Carga evaluativa: {cant_eval} evaluaciones y {cant_tps} trabajos prácticos.
         * Contexto del Nivel: {contexto_nivel_str}
-        * Desafíos de Inclusión (para plan y rúbricas): {inclusion_str}
+        * Desafíos de Inclusión y cantidad de alumnos a considerar: {inclusion_str}
         
         **Input Base del Docente (Temas, Parrilla Anual, etc.):**
         ---
